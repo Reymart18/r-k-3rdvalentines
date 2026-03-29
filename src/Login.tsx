@@ -11,18 +11,18 @@ interface LoginProps {
 }
 
 const heartVideos = [
-    '/src/assets/vid1.mp4',
-    '/src/assets/vid2.mp4',
-    '/src/assets/vid3.mp4',
+    '/assets/vid1.mp4',
+    '/assets/vid2.mp4',
+    '/assets/vid3.mp4',
 ];
 
 const heartImages = [
-    '/src/assets/pic1.jpg', '/src/assets/pic2.jpg', '/src/assets/pic3.jpg',
-    '/src/assets/pic4.jpg', '/src/assets/pic5.jpg', '/src/assets/pic6.jpg',
-    '/src/assets/pic7.jpg', '/src/assets/pic8.jpg', '/src/assets/pic9.jpg',
-    '/src/assets/pic10.jpg', '/src/assets/pic11.jpg', '/src/assets/pic12.jpg',
-    '/src/assets/pic13.jpg', '/src/assets/pic14.jpg', '/src/assets/pic15.jpg',
-    '/src/assets/pic16.jpg', '/src/assets/pic17.jpg', '/src/assets/pic18.jpg',
+    '/assets/pic1.jpg', '/assets/pic2.jpg', '/assets/pic3.jpg',
+    '/assets/pic4.jpg', '/assets/pic5.jpg', '/assets/pic6.jpg',
+    '/assets/pic7.jpg', '/assets/pic8.jpg', '/assets/pic9.jpg',
+    '/assets/pic10.jpg', '/assets/pic11.jpg', '/assets/pic12.jpg',
+    '/assets/pic13.jpg', '/assets/pic14.jpg', '/assets/pic15.jpg',
+    '/assets/pic16.jpg', '/assets/pic17.jpg', '/assets/pic18.jpg',
 ];
 
 const failMessages = [

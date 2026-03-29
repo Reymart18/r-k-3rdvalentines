@@ -59,7 +59,7 @@ export default function Header({ onLogout }: HeaderProps) {
     return (
         <div ref={headerRef} className="relative flex items-center justify-between gap-3 overflow-visible px-4 pb-4 pt-6 sm:px-6 sm:pt-8">
             <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-                <img src="/src/assets/logo.png" alt="RK" className="h-14 w-14 rounded-full object-cover sm:h-20 sm:w-20" style={{ boxShadow: '0 0 15px rgba(225,29,72,0.2)' }} />
+                <img src="/assets/logo.png" alt="RK" className="h-14 w-14 rounded-full object-cover sm:h-20 sm:w-20" style={{ boxShadow: '0 0 15px rgba(225,29,72,0.2)' }} />
                 <div>
                     <h1 className="text-lg font-bold sm:text-2xl" style={{ color: '#f9a8c8', textShadow: '0 2px 20px rgba(225,29,72,0.2)' }}>
                         Our Story

@@ -53,7 +53,7 @@ export default function Chatbot() {
                     <ChatHeader
                         name="Reymart Omega"
                         subtitle="Always here for you 💗"
-                        avatarSrc="/src/assets/me.jpg"
+                        avatarSrc="/assets/me.jpg"
                     />
                     <MessageList messages={messages} />
                     <ChatOptions options={chatOptions} onOptionClick={handleOptionClick} />

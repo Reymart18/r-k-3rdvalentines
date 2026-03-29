@@ -52,7 +52,7 @@ export default function HeartBox({ heartOpen, onToggle }: HeartBoxProps) {
                             boxShadow: '0 0 30px rgba(236, 72, 153, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.3)'
                         }}>
                             <img
-                                src="/src/assets/pic.jpg"
+                                src="/assets/pic.jpg"
                                 alt="Our Love"
                                 className="w-full h-full object-cover"
                             />
