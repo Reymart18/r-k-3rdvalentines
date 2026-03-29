@@ -16,13 +16,16 @@ interface CapOpenerProps {
 export default function CapOpener({ onOpen }: CapOpenerProps) {
     const { size, viewport } = useThree();
     const aspect = size.width / viewport.width;
+    const isMobile = size.width < 640;
+    const homeX = isMobile ? 1.7 : 2.5;
+    const homeY = isMobile ? 2.35 : 2.5;
 
     const didOpenRef = useRef(false);
     const dragStartYRef = useRef(0);
 
     const [{ x, y, z }, api] = useSpring(() => ({
-        x: 2.5,
-        y: 2.5,
+        x: homeX,
+        y: homeY,
         z: 1,
         config: { mass: 1, tension: 280, friction: 25 },
     }));
@@ -31,8 +34,8 @@ export default function CapOpener({ onOpen }: CapOpenerProps) {
         ({ active, first, offset: [ox, oy], event }) => {
             if (active) {
                 // Convert pointer pixel offset to scene units and clamp to the bottle stage.
-                const newX = THREE.MathUtils.clamp(2.5 + ox / aspect, -3.2, 3.2);
-                const newY = THREE.MathUtils.clamp(2.5 - oy / aspect, 0.4, 3.6);
+                const newX = THREE.MathUtils.clamp(homeX + ox / aspect, -3.2, 3.2);
+                const newY = THREE.MathUtils.clamp(homeY - oy / aspect, 0.4, 3.6);
 
                 if (first) {
                     dragStartYRef.current = newY;
@@ -51,7 +54,7 @@ export default function CapOpener({ onOpen }: CapOpenerProps) {
                 }
             } else {
                 // On release, spring back to default position
-                api.start({ x: 2.5, y: 2.5 });
+                api.start({ x: homeX, y: homeY });
             }
             return event;
         },
