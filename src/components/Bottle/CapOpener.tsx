@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import * as THREE from 'three';
-import { useDrag } from '@use-gesture/react';
 import { useThree } from '@react-three/fiber';
 import { a, useSpring } from '@react-spring/three';
 
@@ -22,6 +21,10 @@ export default function CapOpener({ onOpen }: CapOpenerProps) {
 
     const didOpenRef = useRef(false);
     const dragStartYRef = useRef(0);
+    const draggingRef = useRef(false);
+    const activePointerIdRef = useRef<number | null>(null);
+    const pointerStartRef = useRef({ x: 0, y: 0 });
+    const openerStartRef = useRef({ x: homeX, y: homeY });
 
     const [{ x, y, z }, api] = useSpring(() => ({
         x: homeX,
@@ -30,39 +33,74 @@ export default function CapOpener({ onOpen }: CapOpenerProps) {
         config: { mass: 1, tension: 280, friction: 25 },
     }));
 
-    const bind = useDrag(
-        ({ active, first, offset: [ox, oy], event }) => {
-            if (active) {
-                // Convert pointer pixel offset to scene units and clamp to the bottle stage.
-                const newX = THREE.MathUtils.clamp(homeX + ox / aspect, -3.2, 3.2);
-                const newY = THREE.MathUtils.clamp(homeY - oy / aspect, 0.4, 3.6);
+    const handlePointerDown = (e: any) => {
+        e.stopPropagation();
+        e.preventDefault?.();
 
-                if (first) {
-                    dragStartYRef.current = newY;
-                }
+        draggingRef.current = true;
+        activePointerIdRef.current = e.pointerId;
+        pointerStartRef.current = { x: e.clientX, y: e.clientY };
+        openerStartRef.current = { x: x.get(), y: y.get() };
+        dragStartYRef.current = y.get();
 
-                api.start({ x: newX, y: newY, immediate: true });
+        if (e.target?.setPointerCapture) {
+            e.target.setPointerCapture(e.pointerId);
+        }
+    };
 
-                const dx = newX - CAP_TARGET_X;
-                const dy = newY - CAP_TARGET_Y;
-                const distanceToCapXY = Math.hypot(dx, dy);
-                const liftedUp = newY - dragStartYRef.current;
+    const handlePointerMove = (e: any) => {
+        if (!draggingRef.current || activePointerIdRef.current !== e.pointerId) return;
+        e.stopPropagation();
+        e.preventDefault?.();
 
-                if (!didOpenRef.current && distanceToCapXY < OPEN_THRESHOLD_XY && liftedUp > LIFT_THRESHOLD) {
-                    didOpenRef.current = true;
-                    onOpen();
-                }
-            } else {
-                // On release, spring back to default position
-                api.start({ x: homeX, y: homeY });
-            }
-            return event;
-        },
-        { pointer: { touch: true } }
-    );
+        const dxPx = e.clientX - pointerStartRef.current.x;
+        const dyPx = e.clientY - pointerStartRef.current.y;
+
+        const newX = THREE.MathUtils.clamp(openerStartRef.current.x + dxPx / aspect, -3.2, 3.2);
+        const newY = THREE.MathUtils.clamp(openerStartRef.current.y - dyPx / aspect, 0.4, 3.6);
+
+        api.start({ x: newX, y: newY, immediate: true });
+
+        const dx = newX - CAP_TARGET_X;
+        const dy = newY - CAP_TARGET_Y;
+        const distanceToCapXY = Math.hypot(dx, dy);
+        const liftedUp = newY - dragStartYRef.current;
+
+        if (!didOpenRef.current && distanceToCapXY < OPEN_THRESHOLD_XY && liftedUp > LIFT_THRESHOLD) {
+            didOpenRef.current = true;
+            onOpen();
+        }
+    };
+
+    const handlePointerUp = (e: any) => {
+        if (activePointerIdRef.current !== e.pointerId) return;
+        e.stopPropagation();
+        e.preventDefault?.();
+
+        draggingRef.current = false;
+        activePointerIdRef.current = null;
+        if (e.target?.releasePointerCapture) {
+            e.target.releasePointerCapture(e.pointerId);
+        }
+
+        api.start({ x: homeX, y: homeY });
+    };
 
     return (
-        <a.group position-x={x} position-y={y} position-z={z} {...bind()}>
+        <a.group
+            position-x={x}
+            position-y={y}
+            position-z={z}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+        >
+            <mesh>
+                <sphereGeometry args={[0.72, 24, 24]} />
+                <meshBasicMaterial transparent opacity={0.001} depthWrite={false} />
+            </mesh>
+
             {/* Arm */}
             <mesh castShadow receiveShadow>
                 <boxGeometry args={[0.14, 1.4, 0.28]} />

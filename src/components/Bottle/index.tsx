@@ -48,7 +48,7 @@ export default function BottleExperience() {
                     camera={{ position: [0, 2.5, 8], fov: 42, near: 0.1, far: 50 }}
                     gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
                     dpr={[1, 1.5]}
-                    style={{ background: 'transparent' }}
+                    style={{ background: 'transparent', touchAction: 'none' }}
                     onCreated={({ gl }) => {
                         gl.toneMapping = THREE.ACESFilmicToneMapping;
                         gl.toneMappingExposure = 1.05;
