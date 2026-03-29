@@ -178,7 +178,6 @@ function LandingPage({ onLogout }: LandingPageProps) {
             { img: '/assets/stories/2025(2).jpg', caption: '' },
             { img: '/assets/stories/2025(3).jpg', caption: '' },
             { img: '/assets/stories/2025(4).jpg', caption: '' },
-            { img: '/assets/stories/2025(5).jpg', caption: '' },
             ],
         },
     ];
