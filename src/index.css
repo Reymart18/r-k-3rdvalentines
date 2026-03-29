@@ -1,0 +1,232 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  cursor: url('/heart-cursor.svg') 16 16, auto;
+}
+button, a, [role="button"], [tabindex], input[type="button"], input[type="submit"], .cursor-pointer, .clickable {
+  cursor: url('/heart-cursor.svg') 16 16, auto !important;
+}
+
+/* 3D Floating Hearts Animation */
+@keyframes float-3d {
+
+  0%,
+  100% {
+    transform: translateY(0) translateZ(0) rotateY(0deg) rotateX(0deg);
+    opacity: 0.4;
+  }
+
+  25% {
+    transform: translateY(-15px) translateZ(30px) rotateY(15deg) rotateX(10deg);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: translateY(-25px) translateZ(50px) rotateY(0deg) rotateX(-5deg);
+    opacity: 0.9;
+  }
+
+  75% {
+    transform: translateY(-10px) translateZ(20px) rotateY(-15deg) rotateX(5deg);
+    opacity: 0.6;
+  }
+}
+
+.animate-float-3d {
+  animation: float-3d 5s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+/* 3D Heartbeat Animation */
+@keyframes heartbeat-3d {
+
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  10% {
+    transform: translateX(-50%) scale(1.2);
+  }
+
+  20% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  30% {
+    transform: translateX(-50%) scale(1.15);
+  }
+
+  40% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.animate-heartbeat {
+  animation: heartbeat-3d 1.5s ease-in-out infinite;
+}
+
+/* 3D Bounce Animation */
+@keyframes bounce-3d {
+
+  0%,
+  100% {
+    transform: translateY(0) translateZ(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-12px) translateZ(20px) scale(1.1);
+  }
+}
+
+.animate-bounce-3d {
+  animation: bounce-3d 0.8s ease-in-out infinite;
+}
+
+/* 3D Card Hover Effect */
+.card-3d {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+}
+
+.card-3d:hover {
+  transform: rotateX(0deg) rotateY(0deg) translateZ(20px) scale(1.02);
+}
+
+/* 3D Input Styling */
+.input-3d {
+  transition: all 0.3s ease;
+  transform: translateZ(0);
+}
+
+.input-3d:focus {
+  transform: translateZ(10px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(236, 72, 153, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.9), inset 0 -2px 4px rgba(236, 72, 153, 0.15) !important;
+}
+
+/* 3D Button Styling */
+.button-3d {
+  transition: all 0.15s ease;
+}
+
+.button-3d:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 8px 0 #be185d,
+    0 12px 30px rgba(236, 72, 153, 0.6),
+    inset 0 2px 10px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.button-3d:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 #be185d,
+    0 4px 10px rgba(236, 72, 153, 0.4),
+    inset 0 2px 10px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 10px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 3D Heart Emoji */
+.heart-emoji {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.heart-emoji:hover {
+  transform: scale(1.3) translateY(-5px) !important;
+}
+
+.heart-3d {
+  transform-style: preserve-3d;
+}
+
+/* Custom scrollbar for a romantic touch */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #150a12;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #5c1a30, #3d1222);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7a2040, #5c1a30);
+}
+
+/* Romantic selection color */
+::selection {
+  background: rgba(225, 29, 72, 0.3);
+  color: #f9a8c8;
+}
+
+/* Hide date input default text when empty */
+input[type="date"].date-empty::-webkit-datetime-edit {
+  color: transparent;
+}
+
+input[type="date"]:not(.date-empty)::-webkit-datetime-edit {
+  color: #db2777;
+}
+
+/* 3D Background glow effect */
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Shimmer effect for card */
+.card-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent);
+  transition: left 0.5s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.card-3d:hover::before {
+  left: 100%;
+}
+
+/* Popup animation for heart click */
+@keyframes popup {
+  0% {
+    transform: scale(0) rotate(-10deg);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-popup {
+  animation: popup 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
