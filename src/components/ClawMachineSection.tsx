@@ -1,9 +1,30 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import ClawMachine from './ClawMachine';
 
 export default function ClawMachineSection() {
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: '320px 0px' }
+        );
+
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
+
     return (
-        <div className="relative mx-auto flex w-full max-w-[1260px] flex-col items-center gap-5 px-4 sm:px-6 md:flex-row md:gap-16" style={{ minHeight: 'min(85vh, 780px)' }}>
+        <div ref={sectionRef} className="relative mx-auto flex w-full max-w-[1260px] flex-col items-center gap-5 px-4 sm:px-6 md:flex-row md:gap-16" style={{ minHeight: 'min(85vh, 780px)' }}>
             {/* Left Panel — 3D Claw Machine */}
             <div className="relative w-full flex-1" style={{ height: 'min(74vh, 740px)', minHeight: '360px' }}>
                 <Suspense fallback={
@@ -11,7 +32,7 @@ export default function ClawMachineSection() {
                         <p className="text-sm animate-pulse" style={{ color: 'rgba(248,180,200,0.45)' }}>Loading claw machine...</p>
                     </div>
                 }>
-                    <ClawMachine />
+                    {isVisible ? <ClawMachine /> : null}
                 </Suspense>
             </div>
 

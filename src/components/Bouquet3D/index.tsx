@@ -4,22 +4,27 @@ import { SharedGeometryProvider } from './sharedGeometry';
 import Scene from './Scene';
 
 export default function Bouquet3D() {
+    const isLowPower =
+        typeof window !== 'undefined' &&
+        (window.innerWidth < 768 || (navigator.hardwareConcurrency ?? 8) <= 4);
+
     return (
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             <Canvas
-                shadows
+                shadows={!isLowPower}
                 camera={{ position: [0, 2.2, 8], fov: 30, near: 0.1, far: 100 }}
                 gl={{
-                    antialias: true,
+                    antialias: !isLowPower,
                     alpha: true,
-                    powerPreference: 'default',
+                    powerPreference: isLowPower ? 'low-power' : 'default',
                     failIfMajorPerformanceCaveat: false,
                 }}
-                dpr={[1, 1.5]}
+                dpr={isLowPower ? [0.7, 1] : [1, 1.5]}
                 style={{ background: 'transparent' }}
                 onCreated={({ gl }) => {
                     gl.toneMapping = THREE.ACESFilmicToneMapping;
                     gl.toneMappingExposure = 1.2;
+                    gl.shadowMap.enabled = !isLowPower;
                     gl.shadowMap.type = THREE.VSMShadowMap;
                 }}
             >

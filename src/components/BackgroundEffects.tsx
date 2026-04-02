@@ -1,24 +1,43 @@
+import { useMemo } from 'react';
+
 export default function BackgroundEffects() {
+    const isLowPower = typeof window !== 'undefined' && window.innerWidth < 768;
+    const particleCount = isLowPower ? 8 : 15;
+    const particles = useMemo(
+        () =>
+            Array.from({ length: particleCount }, (_, i) => ({
+                id: i,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${8 + Math.random() * 8}s`,
+                fontSize: `${0.6 + Math.random() * 1.0}rem`,
+                opacity: 0.12 + Math.random() * 0.08,
+                glyph: ['✦', '♥', '·', '✧', '♥'][i % 5],
+            })),
+        [particleCount]
+    );
+
     return (
         <>
             {/* Soft floating particles */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {[...Array(15)].map((_, i) => (
+                {particles.map((p) => (
                     <div
-                        key={i}
+                        key={p.id}
                         className="absolute"
                         style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            animationDelay: `${Math.random() * 5}s`,
-                            animationDuration: `${8 + Math.random() * 8}s`,
-                            fontSize: `${0.6 + Math.random() * 1.0}rem`,
-                            animation: `float-3d ${8 + Math.random() * 8}s ease-in-out infinite`,
-                            opacity: 0.12 + Math.random() * 0.08,
+                            left: p.left,
+                            top: p.top,
+                            animationDelay: p.animationDelay,
+                            animationDuration: p.animationDuration,
+                            fontSize: p.fontSize,
+                            animation: `float-3d ${p.animationDuration} ease-in-out infinite`,
+                            opacity: p.opacity,
                             filter: 'blur(0.5px)',
                         }}
                     >
-                        {['✦', '♥', '·', '✧', '♥'][i % 5]}
+                        {p.glyph}
                     </div>
                 ))}
             </div>

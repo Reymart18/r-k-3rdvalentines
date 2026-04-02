@@ -1,9 +1,30 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import Bouquet3D from './Bouquet3D';
 
 export default function BouquetSection() {
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: '320px 0px' }
+        );
+
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
+
     return (
-        <div className="relative mx-auto flex w-full max-w-[1260px] flex-col items-center gap-5 px-4 sm:px-6 md:flex-row md:gap-16" style={{ minHeight: 'min(80vh, 700px)' }}>
+        <div ref={sectionRef} className="relative mx-auto flex w-full max-w-[1260px] flex-col items-center gap-5 px-4 sm:px-6 md:flex-row md:gap-16" style={{ minHeight: 'min(80vh, 700px)' }}>
             {/* Left Panel — Text */}
             <div className="relative w-full flex-shrink-0 py-6 text-center md:w-[42%] md:py-0 md:text-left">
                 <p className="text-sm md:text-base uppercase tracking-[0.3em] mb-5" style={{ color: 'rgba(248,180,200,0.35)' }}>— a gift for you —</p>
@@ -39,7 +60,7 @@ export default function BouquetSection() {
                         <p className="text-sm animate-pulse" style={{ color: 'rgba(248,180,200,0.45)' }}>Loading bouquet...</p>
                     </div>
                 }>
-                    <Bouquet3D />
+                    {isVisible ? <Bouquet3D /> : null}
                 </Suspense>
             </div>
         </div>

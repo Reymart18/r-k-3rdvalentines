@@ -6,6 +6,10 @@ import Scene from './Scene';
 const MESSAGE_TEXT = `Hello love love! Happy 3rd Valentines to us! We weren't avail to celebrate it in elegant way dahil nag asikaso at nagbenta tayo together ng araw na iyon, but i'm very happy and proud dahil ganon ang ginawa natin. New experience, and we did it together, first time together, and that's very very valuable to me! Sorry for not giving this to you in exact Valentines day. Damn we were so busy talaga, but thankyou for always understanding me, understanding my situation. Thankyou for not pressuring me, thankyou dahil Kahit hindi ko pa man mapantayan at mabigay ang magagara at special na bagay na binibigay mo sa akin, nandiyan ka pa rin at nakikinig. I know you don't want me to feel sorry for it, dahil you understand my situation, but I'm sorry po for that, for not being able to give you something special, for not being able to treat you ng kung ano-ano sa labas. Sorry po, dahil most of the time ikaw lang ang nakapagbibigay at madalas talagang nagbibigay, and hindi ko man lang mapantayan kahit kalahati. Palagi akong grateful sa kung paano mo ako tinatrato, sa kung paano mo ako minamahal at pinapahalagahan, at sa kung paano mo ako binibigyang pansin. Mahal na mahal po kita sobra! and pagnagkawork na talaga po tayo, babawi talaga po ako sayo. I love you so much, love love! you're very very special sa akin! Nalagpasan na natin ang 3rd Valentines natin, and next naman is 3rd Anniversary, wow talaga, ang bilis ng panahon pero hindi rin siya mabilis sa pakiramdam dahil we know kung ano ang struggle, ang pag-ibig, ang yakap, ang pag-unawa, ang pag-iyak na pinagdaanan natin together to be here, i'm very very glad that we are here! but simula pa lang naman, i have a feeling na aabot tayo dito at aabot tayo forever, dahil that's how we build this relationship. And that's why i'm very very proud sa kung ano ang mayroon tayo dahil we build this together. we held hands for this. Kaya ang sarap sa pakiramdam, dahil sa susunod, future na ang iisipin natin, sa kung paano tayo magsasama sa iisang bahay. Little steps, but sure ang patutunguhan. I love you so much love love!! dumating na si mama, baka mahuli pa akong naiyak wahahahahahahahaha happy 3rd valentines ulit!  peace for the wrong grammar! <3`;
 
 export default function BottleExperience() {
+    const isLowPower =
+        typeof window !== 'undefined' &&
+        (window.innerWidth < 768 || (navigator.hardwareConcurrency ?? 8) <= 4);
+
     const [isOpen, setIsOpen] = useState(false);
     const [isMessageOpen, setIsMessageOpen] = useState(false);
     const [isModalExpanded, setIsModalExpanded] = useState(false);
@@ -44,15 +48,15 @@ export default function BottleExperience() {
                 }}
             >
                 <Canvas
-                    shadows
+                    shadows={!isLowPower}
                     camera={{ position: [0, 2.5, 8], fov: 42, near: 0.1, far: 50 }}
-                    gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-                    dpr={[1, 1.5]}
+                    gl={{ antialias: !isLowPower, alpha: true, powerPreference: isLowPower ? 'low-power' : 'high-performance' }}
+                    dpr={isLowPower ? [0.7, 1] : [1, 1.5]}
                     style={{ background: 'transparent', touchAction: 'none' }}
                     onCreated={({ gl }) => {
                         gl.toneMapping = THREE.ACESFilmicToneMapping;
                         gl.toneMappingExposure = 1.05;
-                        gl.shadowMap.enabled = true;
+                        gl.shadowMap.enabled = !isLowPower;
                         gl.shadowMap.type = THREE.PCFSoftShadowMap;
                     }}
                 >

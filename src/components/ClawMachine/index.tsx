@@ -18,7 +18,10 @@ const DELIVER_X = -1.8;
 const DELIVER_Z = 0;
 
 export default function ClawMachine() {
-    const hearts = useMemo(() => generateHearts(40), []);
+    const isLowPower =
+        typeof window !== 'undefined' &&
+        (window.innerWidth < 768 || (navigator.hardwareConcurrency ?? 8) <= 4);
+    const hearts = useMemo(() => generateHearts(isLowPower ? 24 : 40), [isLowPower]);
     const [removedHearts, setRemovedHearts] = useState<Set<number>>(new Set());
     const [joystickTilt, setJoystickTilt] = useState<{ x: number; z: number }>({ x: 0, z: 0 });
     const keysDown = useRef<Set<string>>(new Set());
@@ -201,7 +204,7 @@ export default function ClawMachine() {
     return (
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             <Canvas
-                shadows
+                shadows={!isLowPower}
                 camera={{
                     position: [1, 2.5, 18],
                     fov: 35,
@@ -209,17 +212,17 @@ export default function ClawMachine() {
                     far: 100,
                 }}
                 gl={{
-                    antialias: true,
+                    antialias: !isLowPower,
                     alpha: true,
-                    powerPreference: 'default',
+                    powerPreference: isLowPower ? 'low-power' : 'default',
                     failIfMajorPerformanceCaveat: false,
                 }}
-                dpr={[1, 1.5]}
+                dpr={isLowPower ? [0.7, 1] : [1, 1.5]}
                 style={{ background: 'transparent' }}
                 onCreated={({ gl }) => {
                     gl.toneMapping = THREE.ACESFilmicToneMapping;
                     gl.toneMappingExposure = 1.1;
-                    gl.shadowMap.enabled = true;
+                    gl.shadowMap.enabled = !isLowPower;
                     gl.shadowMap.type = THREE.VSMShadowMap;
                 }}
             >
